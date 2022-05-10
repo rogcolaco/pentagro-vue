@@ -1,6 +1,6 @@
 <template>
   <div>
-    <a v-bind:class="btnType" class="btn" href="/user-management">{{btnTitle}}</a>
+    <button v-bind:class="btnType" class="btn">{{btnTitle}}</button>
   </div>
 </template>
 
