@@ -4,17 +4,17 @@
       v-bind:type="inputType"
       :value="modelValue"
       @input="$emit('update:modelValue', $event.target.value)"
-      name="input-text"
-      id="input-text"
+      :name="identityValue"
+      :id="identityValue"
       class="form-control"
     />
-    <label for="input-text">{{ inputLabel }}</label>
+    <label :for="identityValue">{{ inputLabel }}</label>
   </div>
 </template>
 
 <script>
 export default {
-  props: ['inputLabel', 'inputType', 'modelValue'],
+  props: ['inputLabel', 'inputType', 'modelValue', 'identityValue'],
   emits: ['update:modelValue'],
 };
 </script>

@@ -1,16 +1,16 @@
 <template>
   <div class="login-box d-grid gap-2 col-6 mx-auto container">
     <img src="../assets/logo.png" alt="" srcset="" />
-    <app-input inputLabel="Login" inputType="text" v-model="name" />
-    <app-input inputLabel="Senha" inputType="password" v-model="pwd" />
+    <app-input inputLabel="Login" inputType="text" identityValue = "login" v-model="name" />
+    <app-input inputLabel="Senha" inputType="password" identityValue = "senha" v-model="pwd" />
     <p class="error-message" v-if="loginDenied">Usuário ou senha incorreta</p>
     <app-botao
       btnTitle="Login"
       btnType="btn-primary"
       @click.prevent="getCode"
     />
-    <p>Nome do usuário: {{ userData.Username }}</p>
-    <p>Senha do usuário: {{ userData.UserPassword }}</p>
+    <!-- <p>Nome do usuário: {{ userData.Username }}</p>
+    <p>Senha do usuário: {{ userData.UserPassword }}</p> -->
   </div>
 </template>
 
@@ -38,7 +38,7 @@ export default {
       $http
         .post("login", this.userData)
         .then((res) => {
-          console.log(res.data);
+          //console.log(res.data);
           $http.defaults.headers.common["Authorization"] = "bearer " + res.data;
           this.loginDenied = false;
           this.$router.push("user-management");
@@ -61,9 +61,9 @@ export default {
       // });
       // this.getUsers()
     },
-    getUsers() {
-      $http.get("getusers").then((res) => console.log(res.data));
-    },
+    // getUsers() {
+    //   $http.get("getusers").then((res) => console.log(res.data));
+    // },
   },
 };
 </script>
