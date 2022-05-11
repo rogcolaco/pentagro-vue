@@ -27,18 +27,19 @@ export default {
       },
       name: "",
       pwd: "",
-      loginDenied: true,
+      loginDenied: false,
     };
   },
   methods: {
-    getCode() {
+    async getCode() {
       var md5 = require("md5");
       this.userData.Username = btoa(this.name);
       this.userData.UserPassword = btoa(md5(this.pwd));
-      $http
+      await $http
         .post("login", this.userData)
         .then((res) => {
-          console.log(res.status);
+          console.log(res.data);
+          $http.defaults.headers.common['Authorization'] = 'bearer '+ res.data
           this.loginDenied = false;
           this.$router.push("user-management");
         })
@@ -46,7 +47,11 @@ export default {
           console.log(error.response.status);
           this.loginDenied = true;
         });
+        this.getUsers()
     },
+    getUsers() {
+      $http.get('getusers').then(res => console.log(res.data))
+    }
   },
 };
 </script>

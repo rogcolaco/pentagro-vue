@@ -18,11 +18,12 @@
       <app-switches btnTitle="Tratar Ocorrências?" />
       <app-switches btnTitle="DESABILITAR USUÁRIO" />
     </div>
-    <app-botao btnTitle="Salvar" btnType="btn-success" />
+    <app-botao btnTitle="Salvar" btnType="btn-success" @click="getUsers"/>
   </div>
 </template>
 
 <script>
+import $http from "../plugins/axios";
 import AppSwitches from "../components/App-Switches.vue";
 import AppSelect from "../components/App-Select.vue";
 
@@ -32,6 +33,11 @@ export default {
     "app-select": AppSelect,
   },
   name: "UserManagementView",
+  methods: {
+    getUsers() {
+      $http.get('getusers').then(res => console.log(res.data))
+    }
+  },
 };
 </script>
 
