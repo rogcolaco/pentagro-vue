@@ -1,5 +1,5 @@
 <template>
-  <div class="login-box d-grid gap-2 col-6 mx-auto">
+  <div class="login-box d-grid gap-2 col-6 mx-auto container">
     <img src="../assets/logo.png" alt="" srcset="" />
     <app-input inputLabel="Login" inputType="text" v-model="name" />
     <app-input inputLabel="Senha" inputType="password" v-model="pwd" />
@@ -31,15 +31,15 @@ export default {
     };
   },
   methods: {
-    async getCode() {
+    getCode() {
       var md5 = require("md5");
       this.userData.Username = btoa(this.name);
       this.userData.UserPassword = btoa(md5(this.pwd));
-      await $http
+      $http
         .post("login", this.userData)
         .then((res) => {
           console.log(res.data);
-          $http.defaults.headers.common['Authorization'] = 'bearer '+ res.data
+          $http.defaults.headers.common["Authorization"] = "bearer " + res.data;
           this.loginDenied = false;
           this.$router.push("user-management");
         })
@@ -47,18 +47,30 @@ export default {
           console.log(error.response.status);
           this.loginDenied = true;
         });
-        this.getUsers()
+      // await $http
+      // .post("login", this.userData)
+      // .then((res) => {
+      //   console.log(res.data);
+      //   $http.defaults.headers.common['Authorization'] = 'bearer '+ res.data
+      //   this.loginDenied = false;
+      //   this.$router.push("user-management");
+      // })
+      // .catch((error) => {
+      //   console.log(error.response.status);
+      //   this.loginDenied = true;
+      // });
+      // this.getUsers()
     },
     getUsers() {
-      $http.get('getusers').then(res => console.log(res.data))
-    }
+      $http.get("getusers").then((res) => console.log(res.data));
+    },
   },
 };
 </script>
 
 <style lang="less">
 .login-box {
-  margin-top: 25%;
+  margin-top: 13%;
 
   .error-message {
     color: rgb(194, 26, 26);

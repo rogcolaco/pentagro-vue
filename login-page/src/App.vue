@@ -4,7 +4,7 @@
       <img src="./assets/logo.png" alt="" srcset="" />
       <app-botao btnTitle="Logout" btnType="btn-danger"/>
     </div> -->
-    <div class="container">
+    <div>
       <router-view></router-view>
     </div>
   </div>

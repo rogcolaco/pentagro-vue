@@ -1,6 +1,8 @@
 import { createRouter, createWebHistory } from 'vue-router'
-//import HomeView from '../views/HomeView.vue'
 import LoginView from '../views/LoginView.vue'
+import UserManagementView from '../views/UserManagementView.vue'
+import NotFoundView from '../views/NotFoundView.vue'
+import AccessDenied from '../views/AccessDeniedView.vue'
 
 const routes = [
   {
@@ -11,11 +13,18 @@ const routes = [
   {
     path: '/user-management',
     name: 'user-management',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "about" */ '../views/UserManagementView.vue')
-  }
+    component: UserManagementView
+  },
+  {
+    path: '/access-denied',
+    name: 'access-denied',
+    component: AccessDenied
+  },
+  {
+    path: '/:pathMatch(.*)*',
+    name: 'notFound',
+    component: NotFoundView
+  },
 ]
 
 const router = createRouter({
