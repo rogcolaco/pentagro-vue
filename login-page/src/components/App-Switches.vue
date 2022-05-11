@@ -4,6 +4,7 @@
       class="form-check-input"
       type="checkbox"
       role="switch"
+      :value=value
       id="flexSwitchCheckDefault"
     />
     <label class="form-check-label" for="flexSwitchCheckDefault"
@@ -14,10 +15,7 @@
 
 <script>
 export default {
-  props: {
-    btnTitle: String,
-    btnType: String,
-  },
+  props: ['btnTitle', 'value'],
 };
 </script>
 
