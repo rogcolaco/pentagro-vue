@@ -47,23 +47,7 @@ export default {
           console.log(error.response.status);
           this.loginDenied = true;
         });
-      // await $http
-      // .post("login", this.userData)
-      // .then((res) => {
-      //   console.log(res.data);
-      //   $http.defaults.headers.common['Authorization'] = 'bearer '+ res.data
-      //   this.loginDenied = false;
-      //   this.$router.push("user-management");
-      // })
-      // .catch((error) => {
-      //   console.log(error.response.status);
-      //   this.loginDenied = true;
-      // });
-      // this.getUsers()
     },
-    // getUsers() {
-    //   $http.get("getusers").then((res) => console.log(res.data));
-    // },
   },
 };
 </script>
