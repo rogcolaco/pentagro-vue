@@ -26,6 +26,7 @@
             v-model="localPassword"
           />
         </div>
+        <div class="div-space"></div>
         <div>
           <select
             name="productunit"
@@ -55,10 +56,13 @@
         </div>
       </div>
       <div class="linha container">
-        <div class="tokenExpireControl">
-          <app-botao btnTitle="-" btnType="btn-warning" @click="subtractTime" />
-          {{ user.loginExpiration }}
-          <app-botao btnTitle="+" btnType="btn-warning" @click="sumTime" />
+        <div class="tokenGaget">
+          <p>Tempo de Token:</p>
+          <div class="tokenExpireControl">
+            <app-botao btnTitle="-" btnType="btn-warning" @click="subtractTime" />
+            {{ user.loginExpiration }}
+            <app-botao btnTitle="+" btnType="btn-warning" @click="sumTime" />
+          </div>
         </div>
         <span
             v-show = !user.disabled
@@ -92,8 +96,9 @@
         />
         <app-botao btnTitle="Salvar" btnType="btn-success" @click="saveUser" />
       </div>
-      <div class="users-table">
-        <table class="table table-striped table-hover container">
+      <div class="users-table container">
+        <h3>Usuários Cadastrados</h3>
+        <table class="table table-striped table-hover">
           <tr>
             <th>Id</th>
             <th>Nome</th>
@@ -161,25 +166,25 @@ export default {
     this.checkSuperSkils();
   },
   methods: {
-    saveUser() {
+    async saveUser() {
       if (this.checkPassword()) {
         this.user.userPassword = this.passwordEncripty(this.localPassword);
         this.user.userPassword = this.changeBase(this.user.userPassword)
         this.setUserSkills()
         console.log(this.user)
-        $http
-        // .post('saveuser', this.user)
-        // .then(() => {
-
-        // })
+        await $http
+        .post('saveuser', this.user)
         .catch((error) => {
           console.log(error.response.status);
           this.loginDenied = true;
         });
-        this.cleanForm()
       } else {
         console.log("não passou!");
       }
+      $http.get("getusers").then((res) => {
+        this.users = res.data;
+      });
+      this.cleanForm()
     },
     async updateUserbyId(id) {
       this.cleanForm()
@@ -280,8 +285,12 @@ export default {
     display: flex;
 
     div {
-      width: 90%;
+      width: 100%;
     }
+  }
+
+  select {
+    line-height: 2.65;
   }
 
   .linha {
@@ -317,6 +326,26 @@ export default {
 }
 
 .users-table {
-  border: 1px solid green;
+  border: 1px solid #ccc;
+  padding: 40px;
+  border-radius: 10px;
+  margin-bottom: 100px;
+  background: #f4f4f4;
+
+  h3 {
+    text-align: center;
+    margin-bottom: 50px;;
+  }
+
+  tr {
+    &:hover {
+      background:#dadada;
+    }
+  }
+}
+
+.div-space{
+  min-width: 10px;
+  max-width: 50px;
 }
 </style>
