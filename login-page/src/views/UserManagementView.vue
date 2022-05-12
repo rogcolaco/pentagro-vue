@@ -2,7 +2,9 @@
   <div>
     <app-header />
     <div class="main">
-      <h2 class="page-management-title" v-if="user.id===0">Cadastrar novo Usuário</h2>
+      <h2 class="page-management-title" v-if="user.id === 0">
+        Cadastrar novo Usuário
+      </h2>
       <h2 class="page-management-title" v-else>Alterar Usuário</h2>
       <div class="principal container">
         <div>
@@ -12,11 +14,7 @@
             v-model="user.id"
             hidden
           />
-          <app-input
-            inputLabel="Login"
-            inputType="text"
-            v-model="user.userName"
-          />
+          <app-input inputLabel="Login" inputType="text" v-model="user.userName" />
           <app-input
             inputLabel="Nome Completo"
             inputType="text"
@@ -25,12 +23,10 @@
           <app-input
             inputLabel="Senha"
             inputType="password"
-            v-model="user.userPassword"
+            v-model="localPassword"
           />
         </div>
         <div>
-          <!-- <app-select initialSelect="Selecione a Unidade Corporativa"/> -->
-          <!-- <label for="productunit">Escolha a unidade Corporativa:</label> -->
           <select
             name="productunit"
             id="productunit"
@@ -51,7 +47,11 @@
             inputType="text"
             v-model="user.email"
           />
-          <app-input inputLabel="Confirmação de Senha" inputType="password" />
+          <app-input
+            inputLabel="Confirmação de Senha"
+            inputType="password"
+            v-model="confirmLocalPassword"
+          />
         </div>
       </div>
       <div class="linha container">
@@ -60,16 +60,37 @@
           {{ user.loginExpiration }}
           <app-botao btnTitle="+" btnType="btn-warning" @click="sumTime" />
         </div>
-        <!-- <app-switches btnTitle="Receber Alertas?" :btnStatus="user.receiveAutonomousWarning" value="receiveAutonomousWarning" v-moldel="userSkils"/>
-        <app-switches btnTitle="Tratar Ocorrências?" :btnStatus="user.supervisor" value="supervisor" v-moldel="userSkils"/>
-        <app-switches btnTitle="DESABILITAR USUÁRIO" :btnStatus="user.disabled" value="disabled" v-moldel="userSkils"/> -->
-        <span><input type="checkbox" value="receiveAutonomousWarning" v-model="userSkils">Receber Alertas?</span>
-        <span><input type="checkbox" value="supervisor" v-model="userSkils">Tratar Ocorrências?</span>
-        <span><input type="checkbox" value="disabled" v-model="userSkils">DESABILITAR USUÁRIO</span>
+        <span
+            v-show = !user.disabled
+          ><input
+            type="checkbox"
+            value="receiveAutonomousWarning"
+            v-model="userSkils"
+          />Receber Alertas?</span
+        >
+        <span
+          v-show = !user.disabled
+          ><input
+            type="checkbox"
+            value="supervisor"
+            v-model="userSkils"
+          />Tratar Ocorrências?</span
+        >
+        <span
+          ><input
+            type="checkbox"
+            value="disabled"
+            v-model="userSkils"
+          />DESABILITAR USUÁRIO</span
+        >
       </div>
       <div class="button-wrap">
-      <app-botao btnTitle="Limpar Conteúdo" btnType="btn-warning" @click="cleanForm" />
-      <app-botao btnTitle="Salvar" btnType="btn-success" @click="testUsers" />
+        <app-botao
+          btnTitle="Limpar Conteúdo"
+          btnType="btn-warning"
+          @click="cleanForm"
+        />
+        <app-botao btnTitle="Salvar" btnType="btn-success" @click="saveUser" />
       </div>
       <div class="users-table">
         <table class="table table-striped table-hover container">
@@ -102,20 +123,13 @@
 <script>
 import $http from "../plugins/axios";
 
-//import AppSwitches from "../components/App-Switches.vue";
-//import AppSelect from "../components/App-Select.vue";
-import AppHeader from "../components/AppHeader.vue";
-
 export default {
   name: "UserManagementView",
-  components: {
-    //"app-switches": AppSwitches,
-    //"app-select": AppSelect,
-    "app-header": AppHeader,
-  },
   data() {
     return {
       users: "",
+      localPassword: "",
+      confirmLocalPassword: "",
       products: "",
       userSkils: [],
       user: {
@@ -127,7 +141,7 @@ export default {
         name: "",
         receiveAutonomousWarning: false,
         supervisor: false,
-        system: "",
+        system: 'G',
         unitId: "",
         userName: "",
         userPassword: "",
@@ -144,45 +158,67 @@ export default {
     $http
       .get("getproductionunitlist")
       .then((res) => (this.products = res.data.productionUnitList));
-    this.checkSuperSkils()
+    this.checkSuperSkils();
   },
   methods: {
-    testUsers() {
-      console.log(this.users);
-      this.users.forEach((item) => console.log(item.name));
+    saveUser() {
+      if (this.checkPassword()) {
+        this.user.userPassword = this.passwordEncripty(this.localPassword);
+        this.user.userPassword = this.changeBase(this.user.userPassword)
+        this.setUserSkills()
+        console.log(this.user)
+        $http
+        // .post('saveuser', this.user)
+        // .then(() => {
+
+        // })
+        .catch((error) => {
+          console.log(error.response.status);
+          this.loginDenied = true;
+        });
+        this.cleanForm()
+      } else {
+        console.log("não passou!");
+      }
     },
     async updateUserbyId(id) {
+      this.cleanForm()
       await $http.get("getuserbyid/G/" + id).then((res) => {
         console.log(res.data);
         this.user.id = res.data.id;
         this.user.email = res.data.email;
         this.user.disabled = res.data.disabled;
         this.user.improveTeamMember = res.data.improveTeamMember;
+        if (this.user.improveTeamMember) this.userSkils.push('improveTeamMember')
         this.user.loginExpiration = res.data.loginExpiration;
         this.user.name = res.data.name;
         this.user.receiveAutonomousWarning = res.data.receiveAutonomousWarning;
+        if (this.user.receiveAutonomousWarning) this.userSkils.push('receiveAutonomousWarning')
         this.user.supervisor = res.data.supervisor;
+        if (this.user.supervisor) this.userSkils.push('supervisor')
         this.user.system = res.data.system;
         this.user.unitId = res.data.unitId;
         this.user.userName = res.data.userName;
-        this.user.userPassword = res.data.userPassword;
+        this.localPassword = res.data.userPassword;
+        this.confirmLocalPassword = res.data.userPassword;
       });
-      this.checkSuperSkils()
+      this.checkSuperSkils();
     },
     cleanForm() {
-        this.user.id = 0;
-        this.user.email = '';
-        this.user.disabled = false;
-        this.user.improveTeamMember = false;
-        this.user.loginExpiration = 5;
-        this.user.name = '';
-        this.user.receiveAutonomousWarning = false;
-        this.user.supervisor = false;
-        this.user.system = '';
-        this.user.unitId = ''
-        this.user.userName = '';
-        this.user.userPassword = '';
-        this.checkSuperSkils()
+      this.user.id = 0;
+      this.user.email = "";
+      this.user.disabled = false;
+      this.user.improveTeamMember = false;
+      this.user.loginExpiration = 5;
+      this.user.name = "";
+      this.user.receiveAutonomousWarning = false;
+      this.user.supervisor = false;
+      this.user.system = "";
+      this.user.unitId = "";
+      this.localName = "";
+      this.localPassword = "";
+      this.confirmLocalPassword = "";
+      this.checkSuperSkils();
     },
     subtractTime() {
       this.user.loginExpiration > 0
@@ -192,19 +228,46 @@ export default {
     sumTime() {
       this.user.loginExpiration++;
     },
-    checkSuperSkils(){
-      this.userSkils=[]
-      if(this.user.receiveAutonomousWarning) this.userSkils.push('receiveAutonomousWarning')
-      if(this.user.supervisor) this.userSkils.push('supervisor')
-      if(this.user.disabled) this.userSkils.push('disabled')
-    }
+    checkSuperSkils() {
+      this.userSkils = [];
+      if (this.user.receiveAutonomousWarning)
+        this.userSkils.push("receiveAutonomousWarning");
+      if (this.user.supervisor) this.userSkils.push("supervisor");
+      if (this.user.disabled) this.userSkils.push("disabled");
+    },
+    checkPassword() {
+      if(this.localPassword.trim() && this.confirmLocalPassword.trim() !== ''){
+        var result =
+          this.localPassword === this.confirmLocalPassword.trim() ? true : false;
+        return result;
+      }
+    },
+    passwordEncripty(localPassword){
+      var md5 = require("md5");
+       return md5(localPassword)
+    },
+    changeBase(localData ){
+      if(localData.trim()!== ''){
+        return btoa(localData)
+      }
+    },
+    setUserSkills(){
+        this.user.supervisor = false
+        this.user.receiveAutonomousWarning = false
+        this.user.disabled = false
+        this.userSkils.forEach(item => {
+          if(item === 'supervisor') this.user.supervisor = true
+          if(item === 'receiveAutonomousWarning') this.user.receiveAutonomousWarning = true
+          if(item === 'disabled') this.user.disabled = true
+        })
+    },
   },
+
 };
 </script>
 
 <style lang="less">
-
-.page-management-title{
+.page-management-title {
   text-align: center;
   margin: 35px 0;
 }
@@ -236,6 +299,9 @@ export default {
       border-radius: 5px;
     }
 
+    span input {
+      margin-right: 5px;
+    }
   }
 }
 

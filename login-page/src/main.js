@@ -15,6 +15,7 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 
 import AppBotao from "./components/App-Botao.vue"
 import AppInput from "./components/App-Input.vue"
+import AppHeader from "./components/AppHeader.vue"
 
 /* add icons to the library */
 library.add(faUserSecret)
@@ -23,5 +24,6 @@ library.add(faUserSecret)
 createApp(App).use(store).use(router)
     .component('app-botao', AppBotao)
     .component('app-input', AppInput)
+    .component('app-header', AppHeader)
     .component('font-awesome-icon', FontAwesomeIcon)
     .mount('#app')
