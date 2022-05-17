@@ -307,7 +307,10 @@ export default {
         this.user.receiveAutonomousWarning = false
         this.user.disabled = false
         this.userSkils.forEach(item => {
-          if(item === 'supervisor') this.user.supervisor = true
+          if(item === 'supervisor') {
+            this.user.supervisor = true
+            this.user.improveTeamMember = true
+          } 
           if(item === 'receiveAutonomousWarning') this.user.receiveAutonomousWarning = true
           if(item === 'disabled') this.user.disabled = true
         })
