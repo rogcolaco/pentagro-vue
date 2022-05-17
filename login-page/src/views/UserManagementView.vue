@@ -14,27 +14,39 @@
             v-model="user.id"
             hidden
           />
+          <div>
           <app-input inputLabel="Login" inputType="text" v-model="user.userName" />
+          <p v-if="!inputStatus.userName">Campo Obrigatório</p>
+          </div>
+          <div>
           <app-input
             inputLabel="Nome Completo"
             inputType="text"
             v-model="user.name"
+            v-bind:class="{ inputWarning : !inputStatus.name }"
           />
-          <app-input
+          <p v-if="!inputStatus.name">Campo Obrigatório</p>
+          </div>
+          <div>
+            <app-input
             inputLabel="Senha"
             inputType="password"
             v-model="localPassword"
-          />
+            />
+            <p v-if="!inputStatus.password">Senhas não conferem ou vazias</p>
+          </div>
+          
         </div>
         <div class="div-space"></div>
         <div>
-          <select
+          <div>
+            <select
             name="productunit"
             id="productunit"
             class="form-select mb-3"
             v-model="user.unitId"
           >
-            <option value="">Escolha a unidade corporativa</option>
+            <option value="0">Escolha a unidade corporativa</option>
             <option
               :value="productunit.id"
               v-for="productunit in products"
@@ -43,16 +55,25 @@
               {{ productunit.name }}
             </option>
           </select>
-          <app-input
+          <p v-if="!inputStatus.unitId">Escolha uma unidade</p>
+          </div>
+          <div>
+            <app-input
             inputLabel="E-mail"
             inputType="text"
             v-model="user.email"
           />
-          <app-input
+          <p v-if="!inputStatus.email">E-mail Inválido</p>
+          </div> 
+          <div>
+            <app-input
             inputLabel="Confirmação de Senha"
             inputType="password"
             v-model="confirmLocalPassword"
           />
+            <p v-if="!inputStatus.password">Senhas não conferem ou vazias</p>
+          </div>
+          
         </div>
       </div>
       <div class="linha container">
@@ -137,6 +158,13 @@ export default {
       confirmLocalPassword: "",
       products: "",
       userSkils: [],
+      inputStatus: {
+        userName: true,
+        name: true, 
+        password: true,
+        email: true, 
+        unitId: true
+      },
       user: {
         disabled: false,
         email: "",
@@ -147,7 +175,7 @@ export default {
         receiveAutonomousWarning: false,
         supervisor: false,
         system: 'G',
-        unitId: "",
+        unitId: 0,
         userName: "",
         userPassword: "",
       },
@@ -167,7 +195,14 @@ export default {
   },
   methods: {
     async saveUser() {
-      if (this.checkPassword()) {
+      this.checkPassword()
+      this.checkEmail()
+      this.inputStatus.unitId = this.checkboxValidation()
+      if (this.inputStatus.password &&
+          this.inputStatus.email &&
+          this.inputStatus.unitId &&
+          this.user.name && 
+          this.user.userName) {
         this.user.userPassword = this.passwordEncripty(this.localPassword);
         this.user.userPassword = this.changeBase(this.user.userPassword)
         this.setUserSkills()
@@ -178,13 +213,19 @@ export default {
           console.log(error.response.status);
           this.loginDenied = true;
         });
+        $http.get("getusers").then((res) => {
+        this.users = res.data;
+        });
+        this.cleanForm()
       } else {
+        !this.user.userName ? this.inputStatus.userName=false : this.inputStatus.userName=true
+        !this.user.name ? this.inputStatus.name=false : this.inputStatus.name=true
         console.log("não passou!");
       }
-      $http.get("getusers").then((res) => {
-        this.users = res.data;
-      });
-      this.cleanForm()
+      // $http.get("getusers").then((res) => {
+      //   this.users = res.data;
+      // });
+      // this.cleanForm()
     },
     async updateUserbyId(id) {
       this.cleanForm()
@@ -210,20 +251,9 @@ export default {
       this.checkSuperSkils();
     },
     cleanForm() {
-      this.user.id = 0;
-      this.user.email = "";
-      this.user.disabled = false;
-      this.user.improveTeamMember = false;
-      this.user.loginExpiration = 5;
-      this.user.name = "";
-      this.user.receiveAutonomousWarning = false;
-      this.user.supervisor = false;
-      this.user.system = "";
-      this.user.unitId = "";
-      this.localName = "";
-      this.localPassword = "";
-      this.confirmLocalPassword = "";
-      this.checkSuperSkils();
+      this.resetFormFields()
+      this.resetInputStatus()
+      this.checkSuperSkils()
     },
     subtractTime() {
       this.user.loginExpiration > 0
@@ -241,11 +271,27 @@ export default {
       if (this.user.disabled) this.userSkils.push("disabled");
     },
     checkPassword() {
-      if(this.localPassword.trim() && this.confirmLocalPassword.trim() !== ''){
-        var result =
-          this.localPassword === this.confirmLocalPassword.trim() ? true : false;
-        return result;
+      if((this.localPassword.trim() &&  this.confirmLocalPassword.trim() !== '') && 
+          (this.localPassword.trim() === this.confirmLocalPassword.trim())){
+        this.inputStatus.password = true
+      } else {
+        this.inputStatus.password = false
       }
+    },
+    checkEmail(){
+      let regex = new RegExp('[a-z0-9]+@[a-z]+.[a-z]{2,3}')
+      if(regex.test(this.user.email)){
+        this.inputStatus.email = true
+      } else {
+        this.inputStatus.email = false
+      }
+    },
+    checkboxValidation(){
+      if (this.user.unitId == 0 ) {
+       return false
+      } else {
+        return true
+      } 
     },
     passwordEncripty(localPassword){
       var md5 = require("md5");
@@ -266,6 +312,29 @@ export default {
           if(item === 'disabled') this.user.disabled = true
         })
     },
+    resetFormFields(){
+      this.user.id = 0;
+      this.user.email = "";
+      this.user.userName = '',
+      this.user.disabled = false;
+      this.user.improveTeamMember = false;
+      this.user.loginExpiration = 5;
+      this.user.name = "";
+      this.user.receiveAutonomousWarning = false;
+      this.user.supervisor = false;
+      this.user.system = "";
+      this.user.unitId = "";
+      this.localName = "";
+      this.localPassword = '';
+      this.confirmLocalPassword = '';
+    },
+    resetInputStatus(){
+      this.inputStatus.userName = true
+      this.inputStatus.password = true
+      this.inputStatus.name = true
+      this.inputStatus.email = true
+      this.inputStatus.unitId = true
+    }
   },
 
 };
