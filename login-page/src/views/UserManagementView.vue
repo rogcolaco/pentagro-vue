@@ -14,87 +14,91 @@
             v-model="user.id"
             hidden
           />
-          <div>
-          <app-input inputLabel="Login" inputType="text" v-model="user.userName" />
-          <p v-if="!inputStatus.userName">Campo Obrigatório</p>
-          </div>
-          <div>
-          <app-input
-            inputLabel="Nome Completo"
-            inputType="text"
-            v-model="user.name"
-            v-bind:class="{ inputWarning : !inputStatus.name }"
-          />
-          <p v-if="!inputStatus.name">Campo Obrigatório</p>
-          </div>
-          <div>
+          <div :class="{inputBox : !inputStatus.userName }">
             <app-input
-            inputLabel="Senha"
-            inputType="password"
-            v-model="localPassword"
+              inputLabel="Login"
+              inputType="text"
+              v-model="user.userName"
+            />
+            <p v-if="!inputStatus.userName">Campo Obrigatório</p>
+          </div>
+          <div :class="{inputBox : !inputStatus.name }">
+            <app-input
+              inputLabel="Nome Completo"
+              inputType="text"
+              v-model="user.name"
+              v-bind:class="{ inputWarning: !inputStatus.name }"
+            />
+            <p v-if="!inputStatus.name">Campo Obrigatório</p>
+          </div>
+          <div :class="{inputBox : !inputStatus.password }">
+            <app-input
+              inputLabel="Senha"
+              inputType="password"
+              v-model="localPassword"
             />
             <p v-if="!inputStatus.password">Senhas não conferem ou vazias</p>
           </div>
-          
         </div>
         <div class="div-space"></div>
         <div>
-          <div>
+          <div :class="{inputBox : !inputStatus.unitId }">
             <select
-            name="productunit"
-            id="productunit"
-            class="form-select mb-3"
-            v-model="user.unitId"
-          >
-            <option value="0">Escolha a unidade corporativa</option>
-            <option
-              :value="productunit.id"
-              v-for="productunit in products"
-              :key="productunit.id"
+              name="productunit"
+              id="productunit"
+              class="form-select mb-3"
+              v-model="user.unitId"
             >
-              {{ productunit.name }}
-            </option>
-          </select>
-          <p v-if="!inputStatus.unitId">Escolha uma unidade</p>
+              <option value="0">Escolha a unidade corporativa</option>
+              <option
+                :value="productunit.id"
+                v-for="productunit in products"
+                :key="productunit.id"
+              >
+                {{ productunit.name }}
+              </option>
+            </select>
+            <p v-if="!inputStatus.unitId">Escolha uma unidade</p>
           </div>
-          <div>
+          <div :class="{inputBox : !inputStatus.email }">
             <app-input
-            inputLabel="E-mail"
-            inputType="text"
-            v-model="user.email"
-          />
-          <p v-if="!inputStatus.email">E-mail Inválido</p>
-          </div> 
-          <div>
+              inputLabel="E-mail"
+              inputType="text"
+              v-model="user.email"
+            />
+            <p v-if="!inputStatus.email">E-mail Inválido</p>
+          </div>
+          <div :class="{inputBox : !inputStatus.password }">
             <app-input
-            inputLabel="Confirmação de Senha"
-            inputType="password"
-            v-model="confirmLocalPassword"
-          />
+              inputLabel="Confirmação de Senha"
+              inputType="password"
+              v-model="confirmLocalPassword"
+            />
             <p v-if="!inputStatus.password">Senhas não conferem ou vazias</p>
           </div>
-          
         </div>
       </div>
       <div class="linha container">
         <div class="tokenGaget">
           <p>Tempo de Token:</p>
           <div class="tokenExpireControl">
-            <app-botao btnTitle="-" btnType="btn-warning" @click="subtractTime" />
+            <app-botao
+              btnTitle="-"
+              btnType="btn-warning"
+              @click="subtractTime"
+            />
             {{ user.loginExpiration }}
             <app-botao btnTitle="+" btnType="btn-warning" @click="sumTime" />
           </div>
         </div>
-        <span
-            v-show = !user.disabled
+        <span v-show="!user.disabled"
           ><input
             type="checkbox"
             value="receiveAutonomousWarning"
             v-model="userSkils"
           />Receber Alertas?</span
         >
-        <span
-          v-show = !user.disabled
+        <span v-show="!user.disabled"
           ><input
             type="checkbox"
             value="supervisor"
@@ -160,10 +164,10 @@ export default {
       userSkils: [],
       inputStatus: {
         userName: true,
-        name: true, 
+        name: true,
         password: true,
-        email: true, 
-        unitId: true
+        email: true,
+        unitId: true,
       },
       user: {
         disabled: false,
@@ -174,7 +178,7 @@ export default {
         name: "",
         receiveAutonomousWarning: false,
         supervisor: false,
-        system: 'G',
+        system: "G",
         unitId: 0,
         userName: "",
         userPassword: "",
@@ -195,31 +199,35 @@ export default {
   },
   methods: {
     async saveUser() {
-      this.checkPassword()
-      this.checkEmail()
-      this.inputStatus.unitId = this.checkboxValidation()
-      if (this.inputStatus.password &&
-          this.inputStatus.email &&
-          this.inputStatus.unitId &&
-          this.user.name && 
-          this.user.userName) {
+      this.checkPassword();
+      this.checkEmail();
+      this.inputStatus.unitId = this.checkboxValidation();
+      if (
+        this.inputStatus.password &&
+        this.inputStatus.email &&
+        this.inputStatus.unitId &&
+        this.user.name &&
+        this.user.userName
+      ) {
         this.user.userPassword = this.passwordEncripty(this.localPassword);
-        this.user.userPassword = this.changeBase(this.user.userPassword)
-        this.setUserSkills()
-        console.log(this.user)
-        await $http
-        .post('saveuser', this.user)
-        .catch((error) => {
+        this.user.userPassword = this.changeBase(this.user.userPassword);
+        this.setUserSkills();
+        console.log(this.user);
+        await $http.post("saveuser", this.user).catch((error) => {
           console.log(error.response.status);
           this.loginDenied = true;
         });
         $http.get("getusers").then((res) => {
-        this.users = res.data;
+          this.users = res.data;
         });
-        this.cleanForm()
+        this.cleanForm();
       } else {
-        !this.user.userName ? this.inputStatus.userName=false : this.inputStatus.userName=true
-        !this.user.name ? this.inputStatus.name=false : this.inputStatus.name=true
+        !this.user.userName
+          ? (this.inputStatus.userName = false)
+          : (this.inputStatus.userName = true);
+        !this.user.name
+          ? (this.inputStatus.name = false)
+          : (this.inputStatus.name = true);
         console.log("não passou!");
       }
       // $http.get("getusers").then((res) => {
@@ -228,20 +236,22 @@ export default {
       // this.cleanForm()
     },
     async updateUserbyId(id) {
-      this.cleanForm()
+      this.cleanForm();
       await $http.get("getuserbyid/G/" + id).then((res) => {
         console.log(res.data);
         this.user.id = res.data.id;
         this.user.email = res.data.email;
         this.user.disabled = res.data.disabled;
         this.user.improveTeamMember = res.data.improveTeamMember;
-        if (this.user.improveTeamMember) this.userSkils.push('improveTeamMember')
+        if (this.user.improveTeamMember)
+          this.userSkils.push("improveTeamMember");
         this.user.loginExpiration = res.data.loginExpiration;
         this.user.name = res.data.name;
         this.user.receiveAutonomousWarning = res.data.receiveAutonomousWarning;
-        if (this.user.receiveAutonomousWarning) this.userSkils.push('receiveAutonomousWarning')
+        if (this.user.receiveAutonomousWarning)
+          this.userSkils.push("receiveAutonomousWarning");
         this.user.supervisor = res.data.supervisor;
-        if (this.user.supervisor) this.userSkils.push('supervisor')
+        if (this.user.supervisor) this.userSkils.push("supervisor");
         this.user.system = res.data.system;
         this.user.unitId = res.data.unitId;
         this.user.userName = res.data.userName;
@@ -251,9 +261,9 @@ export default {
       this.checkSuperSkils();
     },
     cleanForm() {
-      this.resetFormFields()
-      this.resetInputStatus()
-      this.checkSuperSkils()
+      this.resetFormFields();
+      this.resetInputStatus();
+      this.checkSuperSkils();
     },
     subtractTime() {
       this.user.loginExpiration > 0
@@ -271,55 +281,58 @@ export default {
       if (this.user.disabled) this.userSkils.push("disabled");
     },
     checkPassword() {
-      if((this.localPassword.trim() &&  this.confirmLocalPassword.trim() !== '') && 
-          (this.localPassword.trim() === this.confirmLocalPassword.trim())){
-        this.inputStatus.password = true
+      if (
+        this.localPassword.trim() &&
+        this.confirmLocalPassword.trim() !== "" &&
+        this.localPassword.trim() === this.confirmLocalPassword.trim()
+      ) {
+        this.inputStatus.password = true;
       } else {
-        this.inputStatus.password = false
+        this.inputStatus.password = false;
       }
     },
-    checkEmail(){
-      let regex = new RegExp('[a-z0-9]+@[a-z]+.[a-z]{2,3}')
-      if(regex.test(this.user.email)){
-        this.inputStatus.email = true
+    checkEmail() {
+      let regex = new RegExp("[a-z0-9]+@[a-z]+.[a-z]{2,3}");
+      if (regex.test(this.user.email)) {
+        this.inputStatus.email = true;
       } else {
-        this.inputStatus.email = false
+        this.inputStatus.email = false;
       }
     },
-    checkboxValidation(){
-      if (this.user.unitId == 0 ) {
-       return false
+    checkboxValidation() {
+      if (this.user.unitId == 0) {
+        return false;
       } else {
-        return true
-      } 
+        return true;
+      }
     },
-    passwordEncripty(localPassword){
+    passwordEncripty(localPassword) {
       var md5 = require("md5");
-       return md5(localPassword)
+      return md5(localPassword);
     },
-    changeBase(localData ){
-      if(localData.trim()!== ''){
-        return btoa(localData)
+    changeBase(localData) {
+      if (localData.trim() !== "") {
+        return btoa(localData);
       }
     },
-    setUserSkills(){
-        this.user.supervisor = false
-        this.user.receiveAutonomousWarning = false
-        this.user.disabled = false
-        this.userSkils.forEach(item => {
-          if(item === 'supervisor') {
-            this.user.supervisor = true
-            this.user.improveTeamMember = true
-          } 
-          if(item === 'receiveAutonomousWarning') this.user.receiveAutonomousWarning = true
-          if(item === 'disabled') this.user.disabled = true
-        })
+    setUserSkills() {
+      this.user.supervisor = false;
+      this.user.receiveAutonomousWarning = false;
+      this.user.disabled = false;
+      this.userSkils.forEach((item) => {
+        if (item === "supervisor") {
+          this.user.supervisor = true;
+          this.user.improveTeamMember = true;
+        }
+        if (item === "receiveAutonomousWarning")
+          this.user.receiveAutonomousWarning = true;
+        if (item === "disabled") this.user.disabled = true;
+      });
     },
-    resetFormFields(){
+    resetFormFields() {
       this.user.id = 0;
       this.user.email = "";
-      this.user.userName = '',
-      this.user.disabled = false;
+      (this.user.userName = ""), (this.user.disabled = false);
       this.user.improveTeamMember = false;
       this.user.loginExpiration = 5;
       this.user.name = "";
@@ -328,18 +341,17 @@ export default {
       this.user.system = "";
       this.user.unitId = "";
       this.localName = "";
-      this.localPassword = '';
-      this.confirmLocalPassword = '';
+      this.localPassword = "";
+      this.confirmLocalPassword = "";
     },
-    resetInputStatus(){
-      this.inputStatus.userName = true
-      this.inputStatus.password = true
-      this.inputStatus.name = true
-      this.inputStatus.email = true
-      this.inputStatus.unitId = true
-    }
+    resetInputStatus() {
+      this.inputStatus.userName = true;
+      this.inputStatus.password = true;
+      this.inputStatus.name = true;
+      this.inputStatus.email = true;
+      this.inputStatus.unitId = true;
+    },
   },
-
 };
 </script>
 
@@ -358,6 +370,31 @@ export default {
 
     div {
       width: 100%;
+    }
+
+    .inputBox {
+
+      select {
+          border: 1px solid rgba(201, 77, 77, 0.5);
+          -webkit-box-shadow: 1px 1px 15px 1px rgba(255,33,33,0.5); 
+          box-shadow: 1px 1px 15px 1px rgba(255,33,33,0.5);
+          margin-bottom: 0.3rem!important;
+        }
+
+      div {
+        margin-bottom: 0.3rem!important;
+        
+        input {
+          border: 1px solid rgba(201, 77, 77, 0.5);
+          -webkit-box-shadow: 1px 1px 15px 1px rgba(255,33,33,0.5); 
+          box-shadow: 1px 1px 15px 1px rgba(255,33,33,0.5);
+        }
+
+      }
+      p {
+        color: red;
+        font-size: 12px;
+      }
     }
   }
 
@@ -406,17 +443,17 @@ export default {
 
   h3 {
     text-align: center;
-    margin-bottom: 50px;;
+    margin-bottom: 50px;
   }
 
   tr {
     &:hover {
-      background:#dadada;
+      background: #dadada;
     }
   }
 }
 
-.div-space{
+.div-space {
   min-width: 10px;
   max-width: 50px;
 }
