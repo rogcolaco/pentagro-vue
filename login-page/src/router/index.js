@@ -1,6 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import LoginView from '../views/LoginView.vue'
-import UserManagementView from '../views/UserManagementView.vue'
+import UserManagementView from '../views/UserManagement/UserManagementView.vue'
 import NotFoundView from '../views/NotFoundView.vue'
 import AccessDenied from '../views/AccessDeniedView.vue'
 
