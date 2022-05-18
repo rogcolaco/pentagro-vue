@@ -6,6 +6,12 @@
         Cadastrar novo Usuário
       </h2>
       <h2 class="page-management-title" v-else>Alterar Usuário</h2>
+
+        <p>supervisor: {{ this.user.supervisor }}</p>
+        <p>recebe alertas: {{ this.user.receiveAutonomousWarning }}</p>
+        <p>desabilitado: {{ this.user.disabled }}</p>
+        <p>{{this.userSkils}}</p>
+
       <div class="principal container">
         <div>
           <app-input
@@ -14,7 +20,7 @@
             v-model="user.id"
             hidden
           />
-          <div :class="{inputBox : !inputStatus.userName }">
+          <div :class="{ inputBox: !inputStatus.userName }">
             <app-input
               inputLabel="Login"
               inputType="text"
@@ -22,7 +28,7 @@
             />
             <p v-if="!inputStatus.userName">Campo Obrigatório</p>
           </div>
-          <div :class="{inputBox : !inputStatus.name }">
+          <div :class="{ inputBox: !inputStatus.name }">
             <app-input
               inputLabel="Nome Completo"
               inputType="text"
@@ -31,7 +37,7 @@
             />
             <p v-if="!inputStatus.name">Campo Obrigatório</p>
           </div>
-          <div :class="{inputBox : !inputStatus.password }">
+          <div :class="{ inputBox: !inputStatus.password }">
             <app-input
               inputLabel="Senha"
               inputType="password"
@@ -42,7 +48,7 @@
         </div>
         <div class="div-space"></div>
         <div>
-          <div :class="{inputBox : !inputStatus.unitId }">
+          <div :class="{ inputBox: !inputStatus.unitId }">
             <select
               name="productunit"
               id="productunit"
@@ -60,7 +66,7 @@
             </select>
             <p v-if="!inputStatus.unitId">Escolha uma unidade</p>
           </div>
-          <div :class="{inputBox : !inputStatus.email }">
+          <div :class="{ inputBox: !inputStatus.email }">
             <app-input
               inputLabel="E-mail"
               inputType="text"
@@ -68,7 +74,7 @@
             />
             <p v-if="!inputStatus.email">E-mail Inválido</p>
           </div>
-          <div :class="{inputBox : !inputStatus.password }">
+          <div :class="{ inputBox: !inputStatus.password }">
             <app-input
               inputLabel="Confirmação de Senha"
               inputType="password"
@@ -91,6 +97,31 @@
             <app-botao btnTitle="+" btnType="btn-warning" @click="sumTime" />
           </div>
         </div>
+        
+        <app-switches
+          btnTitle="Receber Alertas?"
+          :propsStatus="this.user.receiveAutonomousWarning"
+          inputName="receiveAutonomousWarning"
+          @statusIsChanged="user.receiveAutonomousWarning = $event"
+          v-if=!user.disabled
+        />
+
+        <app-switches
+          btnTitle="Supervisor"
+          :propsStatus="this.user.supervisor"
+          inputName="supervisor"
+          @statusIsChanged="user.supervisor = $event"
+          v-if=!user.disabled
+        />
+
+
+        <app-switches
+          btnTitle="DESABILITAR USUÁRIO"
+          :propsStatus="this.user.disabled"
+          inputName="disabled"
+          @statusIsChanged="user.disabled = $event"
+        />
+<!-- 
         <span v-show="!user.disabled"
           ><input
             type="checkbox"
@@ -111,7 +142,7 @@
             value="disabled"
             v-model="userSkils"
           />DESABILITAR USUÁRIO</span
-        >
+        > -->
       </div>
       <div class="button-wrap">
         <app-botao

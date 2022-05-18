@@ -1,7 +1,12 @@
+import AppSwitches from '../../components/App-Switches.vue'
+
 import $http from "../../plugins/axios";
 
 export default {
   name: "UserManagementView",
+  components: {
+    AppSwitches
+  },
   data() {
     return {
       users: "",
@@ -122,10 +127,9 @@ export default {
     },
     checkSuperSkils() {
       this.userSkils = [];
-      if (this.user.receiveAutonomousWarning)
-        this.userSkils.push("receiveAutonomousWarning");
-      if (this.user.supervisor) this.userSkils.push("supervisor");
-      if (this.user.disabled) this.userSkils.push("disabled");
+      if (this.user.receiveAutonomousWarning) this.userSkils.push("receiveAutonomousWarning")
+      if (this.user.supervisor) this.userSkils.push("supervisor")
+      if (this.user.disabled) this.userSkils.push("disabled")
     },
     checkPassword() {
       if (
