@@ -13,7 +13,6 @@ export default {
       localPassword: "",
       confirmLocalPassword: "",
       products: "",
-      userSkils: [],
       inputStatus: {
         userName: true,
         name: true,
@@ -47,7 +46,6 @@ export default {
     $http
       .get("getproductionunitlist")
       .then((res) => (this.products = res.data.productionUnitList));
-    this.checkSuperSkils();
   },
   methods: {
     async saveUser() {
@@ -63,7 +61,7 @@ export default {
       ) {
         this.user.userPassword = this.passwordEncripty(this.localPassword);
         this.user.userPassword = this.changeBase(this.user.userPassword);
-        this.setUserSkills();
+        this.user.improveTeamMember = this.user.supervisor
         console.log(this.user);
         await $http.post("saveuser", this.user).catch((error) => {
           console.log(error.response.status);
@@ -80,12 +78,8 @@ export default {
         !this.user.name
           ? (this.inputStatus.name = false)
           : (this.inputStatus.name = true);
-        console.log("não passou!");
+        //console.log("não passou!");
       }
-      // $http.get("getusers").then((res) => {
-      //   this.users = res.data;
-      // });
-      // this.cleanForm()
     },
     async updateUserbyId(id) {
       this.cleanForm();
@@ -95,27 +89,20 @@ export default {
         this.user.email = res.data.email;
         this.user.disabled = res.data.disabled;
         this.user.improveTeamMember = res.data.improveTeamMember;
-        if (this.user.improveTeamMember)
-          this.userSkils.push("improveTeamMember");
         this.user.loginExpiration = res.data.loginExpiration;
         this.user.name = res.data.name;
         this.user.receiveAutonomousWarning = res.data.receiveAutonomousWarning;
-        if (this.user.receiveAutonomousWarning)
-          this.userSkils.push("receiveAutonomousWarning");
         this.user.supervisor = res.data.supervisor;
-        if (this.user.supervisor) this.userSkils.push("supervisor");
         this.user.system = res.data.system;
         this.user.unitId = res.data.unitId;
         this.user.userName = res.data.userName;
         this.localPassword = res.data.userPassword;
         this.confirmLocalPassword = res.data.userPassword;
       });
-      this.checkSuperSkils();
     },
     cleanForm() {
       this.resetFormFields();
       this.resetInputStatus();
-      this.checkSuperSkils();
     },
     subtractTime() {
       this.user.loginExpiration > 0
@@ -124,12 +111,6 @@ export default {
     },
     sumTime() {
       this.user.loginExpiration++;
-    },
-    checkSuperSkils() {
-      this.userSkils = [];
-      if (this.user.receiveAutonomousWarning) this.userSkils.push("receiveAutonomousWarning")
-      if (this.user.supervisor) this.userSkils.push("supervisor")
-      if (this.user.disabled) this.userSkils.push("disabled")
     },
     checkPassword() {
       if (
@@ -165,20 +146,6 @@ export default {
       if (localData.trim() !== "") {
         return btoa(localData);
       }
-    },
-    setUserSkills() {
-      this.user.supervisor = false;
-      this.user.receiveAutonomousWarning = false;
-      this.user.disabled = false;
-      this.userSkils.forEach((item) => {
-        if (item === "supervisor") {
-          this.user.supervisor = true;
-          this.user.improveTeamMember = true;
-        }
-        if (item === "receiveAutonomousWarning")
-          this.user.receiveAutonomousWarning = true;
-        if (item === "disabled") this.user.disabled = true;
-      });
     },
     resetFormFields() {
       this.user.id = 0;

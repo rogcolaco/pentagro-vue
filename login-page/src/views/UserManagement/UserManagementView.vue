@@ -6,12 +6,6 @@
         Cadastrar novo Usuário
       </h2>
       <h2 class="page-management-title" v-else>Alterar Usuário</h2>
-
-        <p>supervisor: {{ this.user.supervisor }}</p>
-        <p>recebe alertas: {{ this.user.receiveAutonomousWarning }}</p>
-        <p>desabilitado: {{ this.user.disabled }}</p>
-        <p>{{this.userSkils}}</p>
-
       <div class="principal container">
         <div>
           <app-input
@@ -97,13 +91,13 @@
             <app-botao btnTitle="+" btnType="btn-warning" @click="sumTime" />
           </div>
         </div>
-        
+
         <app-switches
           btnTitle="Receber Alertas?"
           :propsStatus="this.user.receiveAutonomousWarning"
           inputName="receiveAutonomousWarning"
           @statusIsChanged="user.receiveAutonomousWarning = $event"
-          v-if=!user.disabled
+          v-if="!user.disabled"
         />
 
         <app-switches
@@ -111,9 +105,8 @@
           :propsStatus="this.user.supervisor"
           inputName="supervisor"
           @statusIsChanged="user.supervisor = $event"
-          v-if=!user.disabled
+          v-if="!user.disabled"
         />
-
 
         <app-switches
           btnTitle="DESABILITAR USUÁRIO"
@@ -121,7 +114,7 @@
           inputName="disabled"
           @statusIsChanged="user.disabled = $event"
         />
-<!-- 
+        <!-- 
         <span v-show="!user.disabled"
           ><input
             type="checkbox"
