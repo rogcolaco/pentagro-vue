@@ -2,21 +2,29 @@
   <div>
     <div id="header">
       <img src="../assets/logo.png" alt="" srcset="" />
-      <app-botao btnTitle="Logout" btnType="btn-danger" @click="logout"/>
+      <div v-show="showLogoutButton == 'true'">
+        <app-botao btnTitle="Logout" btnType="btn-danger" @click="logout" />
+      </div>
     </div>
   </div>
 </template>
 
 <script>
-import $http from '../plugins/axios';
+import $http from "../plugins/axios";
 
 export default {
-    methods: {
-        logout () {
-            $http.defaults.headers.common['Authorization'] = '';
-            this.$router.push('/');
-        }
-    }
+  props: {
+    showLogoutButton: {
+      type: Boolean,
+      required: true,
+    },
+  },
+  methods: {
+    logout() {
+      $http.defaults.headers.common["Authorization"] = "";
+      this.$router.push("/");
+    },
+  },
 };
 </script>
 

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <app-header />
+    <app-header showLogoutButton="true" />
     <div class="main">
       <h2 class="page-management-title" v-if="user.id === 0">
         Cadastrar novo Usuário
@@ -51,11 +51,11 @@
             >
               <option value="0">Escolha a unidade corporativa</option>
               <option
-                :value="productunit.id"
-                v-for="productunit in products"
-                :key="productunit.id"
+                :value="productionUnit.id"
+                v-for="productionUnit in productionsUnits"
+                :key="productionUnit.id"
               >
-                {{ productunit.name }}
+                {{ productionUnit.name }}
               </option>
             </select>
             <p v-if="!inputStatus.unitId">Escolha uma unidade</p>

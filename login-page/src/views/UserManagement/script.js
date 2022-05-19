@@ -12,7 +12,7 @@ export default {
       users: "",
       localPassword: "",
       confirmLocalPassword: "",
-      products: "",
+      productionsUnits: "",
       inputStatus: {
         userName: true,
         name: true,
@@ -45,13 +45,13 @@ export default {
     });
     $http
       .get("getproductionunitlist")
-      .then((res) => (this.products = res.data.productionUnitList));
+      .then((res) => (this.productionsUnits = res.data.productionUnitList));
   },
   methods: {
     async saveUser() {
       this.checkPassword();
       this.checkEmail();
-      this.inputStatus.unitId = this.checkboxValidation();
+      this.inputStatus.unitId = this.checkProducionUnitId();
       if (
         this.inputStatus.password &&
         this.inputStatus.email &&
@@ -115,7 +115,7 @@ export default {
     checkPassword() {
       if (
         this.localPassword.trim() &&
-        this.confirmLocalPassword.trim() !== "" &&
+        this.confirmLocalPassword.trim() !== '' &&
         this.localPassword.trim() === this.confirmLocalPassword.trim()
       ) {
         this.inputStatus.password = true;
@@ -131,7 +131,7 @@ export default {
         this.inputStatus.email = false;
       }
     },
-    checkboxValidation() {
+    checkProducionUnitId() {
       if (this.user.unitId == 0) {
         return false;
       } else {
