@@ -1,18 +1,19 @@
 import AppSwitches from '../../components/App-Switches.vue'
 
-import $http from "../../plugins/axios";
+import $http from '../../plugins/axios';
 
 export default {
-  name: "UserManagementView",
+  name: 'UserManagementView',
   components: {
     AppSwitches
   },
   data() {
     return {
-      users: "",
-      localPassword: "",
-      confirmLocalPassword: "",
-      productionsUnits: "",
+      users: '',
+      localPassword: '',
+      confirmLocalPassword: '',
+      productionsUnits: '',
+      registeredUser: false,
       inputStatus: {
         userName: true,
         name: true,
@@ -22,29 +23,29 @@ export default {
       },
       user: {
         disabled: false,
-        email: "",
+        email: '',
         id: 0,
         improveTeamMember: false,
         loginExpiration: 5,
-        name: "",
+        name: '',
         receiveAutonomousWarning: false,
         supervisor: false,
-        system: "G",
+        system: 'G',
         unitId: 0,
-        userName: "",
-        userPassword: "",
+        userName: '',
+        userPassword: '',
       },
     };
   },
   created() {
-    if (!$http.defaults.headers.common["Authorization"]) {
-      this.$router.push("/access-denied");
+    if (!$http.defaults.headers.common['Authorization']) {
+      this.$router.push('/access-denied');
     }
-    $http.get("getusers").then((res) => {
+    $http.get('getusers').then((res) => {
       this.users = res.data;
     });
     $http
-      .get("getproductionunitlist")
+      .get('getproductionunitlist')
       .then((res) => (this.productionsUnits = res.data.productionUnitList));
   },
   methods: {
@@ -63,14 +64,15 @@ export default {
         this.user.userPassword = this.changeBase(this.user.userPassword);
         this.user.improveTeamMember = this.user.supervisor
         console.log(this.user);
-        await $http.post("saveuser", this.user).catch((error) => {
+        await $http.post('saveuser', this.user).catch((error) => {
           console.log(error.response.status);
           this.loginDenied = true;
         });
-        $http.get("getusers").then((res) => {
+        $http.get('getusers').then((res) => {
           this.users = res.data;
         });
         this.cleanForm();
+        this.registeredUser = true
       } else {
         !this.user.userName
           ? (this.inputStatus.userName = false)
@@ -83,7 +85,7 @@ export default {
     },
     async updateUserbyId(id) {
       this.cleanForm();
-      await $http.get("getuserbyid/G/" + id).then((res) => {
+      await $http.get('getuserbyid/G/' + id).then((res) => {
         console.log(res.data);
         this.user.id = res.data.id;
         this.user.email = res.data.email;
@@ -101,16 +103,17 @@ export default {
       });
     },
     cleanForm() {
-      this.resetFormFields();
-      this.resetInputStatus();
+      this.resetFormFields()
+      this.resetInputStatus()
+      this.registeredUser=false
     },
     subtractTime() {
       this.user.loginExpiration > 0
         ? this.user.loginExpiration--
-        : (this.user.loginExpiration = 0);
+        : (this.user.loginExpiration = 0)
     },
     sumTime() {
-      this.user.loginExpiration++;
+      this.user.loginExpiration++
     },
     checkPassword() {
       if (
@@ -118,56 +121,57 @@ export default {
         this.confirmLocalPassword.trim() !== '' &&
         this.localPassword.trim() === this.confirmLocalPassword.trim()
       ) {
-        this.inputStatus.password = true;
+        this.inputStatus.password = true
       } else {
-        this.inputStatus.password = false;
+        this.inputStatus.password = false
       }
     },
     checkEmail() {
-      let regex = new RegExp("[a-z0-9]+@[a-z]+.[a-z]{2,3}");
+      let regex = new RegExp('[a-z0-9]+@[a-z]+.[a-z]{2,3}')
       if (regex.test(this.user.email)) {
-        this.inputStatus.email = true;
+        this.inputStatus.email = true
       } else {
-        this.inputStatus.email = false;
+        this.inputStatus.email = false
       }
     },
     checkProducionUnitId() {
       if (this.user.unitId == 0) {
-        return false;
+        return false
       } else {
-        return true;
+        return true
       }
     },
     passwordEncripty(localPassword) {
-      var md5 = require("md5");
-      return md5(localPassword);
+      var md5 = require('md5')
+      return md5(localPassword)
     },
     changeBase(localData) {
-      if (localData.trim() !== "") {
-        return btoa(localData);
+      if (localData.trim() !== '') {
+        return window.btoa(localData)
       }
     },
     resetFormFields() {
       this.user.id = 0;
-      this.user.email = "";
-      (this.user.userName = ""), (this.user.disabled = false);
-      this.user.improveTeamMember = false;
-      this.user.loginExpiration = 5;
-      this.user.name = "";
-      this.user.receiveAutonomousWarning = false;
-      this.user.supervisor = false;
-      this.user.system = "";
-      this.user.unitId = "";
-      this.localName = "";
-      this.localPassword = "";
-      this.confirmLocalPassword = "";
+      this.user.email = ''
+      this.user.userName = ''
+      this.user.disabled = false
+      this.user.improveTeamMember = false
+      this.user.loginExpiration = 5
+      this.user.name = ''
+      this.user.receiveAutonomousWarning = false
+      this.user.supervisor = false
+      this.user.system = ''
+      this.user.unitId = ''
+      this.localName = ''
+      this.localPassword = ''
+      this.confirmLocalPassword = ''
     },
     resetInputStatus() {
-      this.inputStatus.userName = true;
-      this.inputStatus.password = true;
-      this.inputStatus.name = true;
-      this.inputStatus.email = true;
-      this.inputStatus.unitId = true;
+      this.inputStatus.userName = true
+      this.inputStatus.password = true
+      this.inputStatus.name = true
+      this.inputStatus.email = true
+      this.inputStatus.unitId = true
     },
   },
 };

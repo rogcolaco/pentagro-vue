@@ -33,7 +33,7 @@ export default {
   methods: {
     getCode() {
       var md5 = require("md5");
-      this.userData.Username = btoa(this.name);
+      this.userData.Username =  btoa(this.name);
       this.userData.UserPassword = btoa(md5(this.pwd));
       $http
         .post("login", this.userData)

@@ -114,28 +114,13 @@
           inputName="disabled"
           @statusIsChanged="user.disabled = $event"
         />
-        <!-- 
-        <span v-show="!user.disabled"
-          ><input
-            type="checkbox"
-            value="receiveAutonomousWarning"
-            v-model="userSkils"
-          />Receber Alertas?</span
-        >
-        <span v-show="!user.disabled"
-          ><input
-            type="checkbox"
-            value="supervisor"
-            v-model="userSkils"
-          />Tratar Ocorrências?</span
-        >
-        <span
-          ><input
-            type="checkbox"
-            value="disabled"
-            v-model="userSkils"
-          />DESABILITAR USUÁRIO</span
-        > -->
+      </div>
+      <div class="registred-button" v-if="registeredUser">
+        <app-botao
+          btnTitle="Usuário Cadastrado com Sucesso"
+          btnType="btn-primary"
+          @click="cleanForm"
+        />
       </div>
       <div class="button-wrap">
         <app-botao
