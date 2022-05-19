@@ -1,7 +1,7 @@
 <template>
   <div>
     <div id="header">
-      <img src="../assets/logo.png" alt="" srcset="" />
+      <a href="/"><img src="../assets/logo.png" alt="" srcset="" /></a>
       <div v-show="showLogoutButton == 'true'">
         <app-botao btnTitle="Logout" btnType="btn-danger" @click="logout" />
       </div>
@@ -34,10 +34,16 @@ export default {
   margin-bottom: 30px;
   display: flex;
   justify-content: space-between;
+  align-items: center;
   padding: 10px 80px;
 
-  img {
-    width: 10%;
+  a{
+    margin: 0;
+
+    img {
+      width: 50%;
+    }
+
   }
 }
 </style>
