@@ -144,7 +144,7 @@
             <td>{{ user.id }}</td>
             <td>{{ user.name }}</td>
             <td>{{ user.email }}</td>
-            <td>{{ user.disabled }}</td>
+            <td>{{ user.disabled ? "Não" : "Sim" }}</td>
             <td>
               <app-botao
                 btnTitle="Editar"

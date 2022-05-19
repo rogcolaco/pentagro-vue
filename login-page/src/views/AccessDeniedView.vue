@@ -2,7 +2,7 @@
   <div>
     <app-header showLogoutButton="false" />
     <div class="container">
-      <h2>Acesso negado</h2>
+      <h2>Acesso negado...</h2>
       <p>
         Para acessar a página solicitada é preciso realizar login no sistema.
       </p>
