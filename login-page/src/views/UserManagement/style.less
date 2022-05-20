@@ -6,17 +6,16 @@
     margin-top: 100px;
 
     .principal{
-      //border: 1px solid red;
       display: flex;
       flex-direction: column;
 
       .principal-column{
-        //border: 1px solid blue;
         display: flex;
+        flex-direction: column;
 
         .principal-column-content{
           //border: 1px solid pink;
-          width: 50%;
+          width: 100%;
           padding: 0 30px;
 
           .inputBox {
@@ -42,12 +41,11 @@
       }
 
       .principal-row{
-        //border: 1px solid green;
         display: flex;
+        flex-direction: column;
 
         .principal-row-content {
-          //border: 1px solid yellow;
-          width: 50%;
+          width: 100%;
           padding: 0 30px;
 
           &.inputBox {     
@@ -74,13 +72,15 @@
   
     .linha {
       display: flex;
-      justify-content: space-evenly;
-      align-items: center;
-      margin-top: 30px;
+      flex-direction: column;
+      //justify-content: center;
+      align-items: flex-start;
+      //margin-top: 30px;
+      margin-bottom: 20px;
   
       .tokenExpireControl {
         display: flex;
-        width: 150px;
+        width: 151px;
         justify-content: space-between;
         align-items: center;
         border: 1px solid #ccc;
@@ -90,19 +90,36 @@
       span input {
         margin-right: 5px;
       }
+
+      .tokenGaget {
+        margin-top: 20px;
+      }
+
+      .form-switch{
+        margin-top: 20px;
+      }
     }
   }
 
   .registred-button {
     text-align: center;
-    margin: 60px 0;
+    //margin: 10px 0 10px 0;
+    
+    button {
+      width: 100%;
+      padding: 30px 0;
+      font-size: 20px;
+      border-radius: 0;
+    }
   }
   
   .button-wrap {
     display: flex;
     flex-direction: row;
     justify-content: center;
-    margin: 60px 0;
+    //margin: 60px 0;
+    margin-top: 30px;
+    margin-bottom: 30px;
   
     div:first-child {
       margin-right: 80px;

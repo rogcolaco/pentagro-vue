@@ -127,6 +127,7 @@
       <div class="registred-button" v-if="registeredUser">
         <app-botao
           btnTitle="Usuário Cadastrado com Sucesso"
+          btnBackgroundColor = "#8edcb9"
           @click="cleanForm"
         />
       </div>

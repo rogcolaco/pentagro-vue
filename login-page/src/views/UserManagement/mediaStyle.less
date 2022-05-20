@@ -1,5 +1,50 @@
 @media (min-width: 1200px) {
-    .principal{
-        border: 1px solid red;
+
+}
+
+
+@media (min-width: 576px) {
+
+}
+
+@media (min-width: 768px) {
+    .main {
+
+        .principal{
+            display: flex;
+            flex-direction: column;
+    
+            .principal-column{
+                flex-direction: row;
+        
+                .principal-column-content{
+                    width: 50%;
+                }
+            }
+    
+            .principal-row{
+                flex-direction: row;
+        
+                .principal-row-content {
+                    width: 50%;
+                }
+            }
+        }
+
+        .linha {
+            flex-direction: row;
+            justify-content: space-evenly;
+            align-items: flex-end;
+            margin-top: 30px;
+          }
     }
+
+}
+
+@media (min-width: 992px) {
+
+}
+
+@media (min-width: 1200px) {
+
 }
