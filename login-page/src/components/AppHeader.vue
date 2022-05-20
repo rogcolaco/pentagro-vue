@@ -1,9 +1,13 @@
 <template>
-  <div>
-    <div id="header">
+  <div id="header">
+    <div id="header-content" class="container">
       <a href="/"><img src="../assets/logo.png" alt="" srcset="" /></a>
       <div v-show="showLogoutButton == 'true'">
-        <app-botao btnTitle="Logout" btnType="btn-danger" @click="logout" />
+        <app-botao 
+        btnTitle="Logout" 
+        btnBackgroundColor="#C21A1A"
+        btnFontColor="#fafafa"
+        @click="logout" />
       </div>
     </div>
   </div>
@@ -15,7 +19,7 @@ import $http from "../plugins/axios";
 export default {
   props: {
     showLogoutButton: {
-      type: Boolean,
+      type: String,
       required: true,
     },
   },
@@ -29,21 +33,25 @@ export default {
 </script>
 
 <style lang="less">
-#header {
-  border-bottom: 1px solid #ccc;
+#header{
+  border-bottom: 1px solid #009a9b;
   margin-bottom: 30px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 10px 80px;
 
-  a{
-    margin: 0;
+  #header-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 30px 0;
 
-    img {
-      width: 50%;
+    a{
+      margin: 0;
+
+      img {
+        width: 50%;
+      }
+
     }
-
   }
 }
+
 </style>

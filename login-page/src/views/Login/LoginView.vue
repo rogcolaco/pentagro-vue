@@ -6,7 +6,6 @@
     <p class="error-message" v-if="loginDenied">Usuário ou senha incorreta</p>
     <app-botao
       btnTitle="Login"
-      btnType="btn-primary"
       @click.prevent="getCode"
     />
   </div>
@@ -36,7 +35,6 @@ export default {
       $http
         .post("login", this.userData)
         .then((res) => {
-          //console.log(res.data);
           $http.defaults.headers.common["Authorization"] = "bearer " + res.data;
           this.loginDenied = false;
           this.$router.push("user-management");

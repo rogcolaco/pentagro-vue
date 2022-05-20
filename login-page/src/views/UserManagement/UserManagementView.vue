@@ -93,11 +93,11 @@
           <div class="tokenExpireControl">
             <app-botao
               btnTitle="-"
-              btnType="btn-warning"
+              btnBackgroundColor="#cdc192"
               @click="subtractTime"
             />
             {{ user.loginExpiration }}
-            <app-botao btnTitle="+" btnType="btn-warning" @click="sumTime" />
+            <app-botao btnTitle="+" btnBackgroundColor="#cdc192" @click="sumTime" />
           </div>
         </div>
 
@@ -127,14 +127,13 @@
       <div class="registred-button" v-if="registeredUser">
         <app-botao
           btnTitle="Usuário Cadastrado com Sucesso"
-          btnType="btn-primary"
           @click="cleanForm"
         />
       </div>
       <div class="button-wrap">
         <app-botao
           btnTitle="Limpar Conteúdo"
-          btnType="btn-warning"
+          btnBackgroundColor="#ccc"
           @click="cleanForm"
         />
         <app-botao btnTitle="Salvar" btnType="btn-success" @click="saveUser" />
@@ -157,7 +156,7 @@
             <td>
               <app-botao
                 btnTitle="Editar"
-                btnType="btn-primary"
+                btnBackgroundColor="#cdc192"
                 @click="updateUserbyId(user.id)"
               />
             </td>
