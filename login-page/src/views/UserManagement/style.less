@@ -4,40 +4,68 @@
   }
   .main {
     margin-top: 100px;
-  
-    .principal {
-      //border: 1px solid blue;
+
+    .principal{
+      //border: 1px solid red;
       display: flex;
-  
-      div {
-        width: 100%;
-      }
-  
-      .inputBox {
-  
-        select {
-            border: 1px solid rgb(194, 26, 26);
-            //-webkit-box-shadow: 1px 1px 15px 1px rgba(255,33,33,0.5); 
-            //box-shadow: 1px 1px 15px 1px rgba(255,33,33,0.5);
-            margin-bottom: 0.3rem!important;
-          }
-  
-        div {
-          margin-bottom: 0.3rem!important;
-          
-          input {
-            border: 1px solid rgb(194, 26, 26);
-            //-webkit-box-shadow: 1px 1px 15px 1px rgba(255,33,33,0.5); 
-            //box-shadow: 1px 1px 15px 1px rgba(255,33,33,0.5);
-          }
-  
+      flex-direction: column;
+
+      .principal-column{
+        //border: 1px solid blue;
+        display: flex;
+
+        .principal-column-content{
+          //border: 1px solid pink;
+          width: 50%;
+          padding: 0 30px;
         }
-        p {
-          color: rgb(194, 26, 26);
-          font-size: 12px;
+      }
+
+      .principal-row{
+        //border: 1px solid green;
+        display: flex;
+
+        .principal-row-content {
+          //border: 1px solid yellow;
+          width: 50%;
+          padding: 0 30px;
         }
       }
     }
+  
+    // .principal {
+    //   //border: 1px solid blue;
+    //   display: flex;
+  
+    //   div {
+    //     width: 100%;
+    //   }
+  
+    //   .inputBox {
+  
+    //     select {
+    //         border: 1px solid rgb(194, 26, 26);
+    //         //-webkit-box-shadow: 1px 1px 15px 1px rgba(255,33,33,0.5); 
+    //         //box-shadow: 1px 1px 15px 1px rgba(255,33,33,0.5);
+    //         margin-bottom: 0.3rem!important;
+    //       }
+  
+    //     div {
+    //       margin-bottom: 0.3rem!important;
+          
+    //       input {
+    //         border: 1px solid rgb(194, 26, 26);
+    //         //-webkit-box-shadow: 1px 1px 15px 1px rgba(255,33,33,0.5); 
+    //         //box-shadow: 1px 1px 15px 1px rgba(255,33,33,0.5);
+    //       }
+  
+    //     }
+    //     p {
+    //       color: rgb(194, 26, 26);
+    //       font-size: 12px;
+    //     }
+    //   }
+    // }
   
     select {
       line-height: 2.65;

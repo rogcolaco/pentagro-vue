@@ -7,31 +7,66 @@
       </h2>
       <h2 class="page-management-title" v-else>Alterar Usuário</h2>
       <div class="principal container">
-        <div>
-          <app-input
-            inputLabel="Id"
-            inputType="text"
-            v-model="user.id"
-            hidden
-          />
-          <div :class="{ inputBox: !inputStatus.userName }">
+        <div class="principal-column">
+          <div class="principal-column-content">
             <app-input
-              inputLabel="Login"
+              inputLabel="Id"
               inputType="text"
-              v-model="user.userName"
+              v-model="user.id"
+              hidden
             />
-            <p v-if="!inputStatus.userName">Campo Obrigatório</p>
+            <div :class="{ inputBox: !inputStatus.userName }">
+              <app-input
+                inputLabel="Login"
+                inputType="text"
+                v-model="user.userName"
+              />
+              <p v-if="!inputStatus.userName">Campo Obrigatório</p>
+            </div>
+            <div :class="{ inputBox: !inputStatus.name }">
+              <app-input
+                inputLabel="Nome Completo"
+                inputType="text"
+                v-model="user.name"
+                v-bind:class="{ inputWarning: !inputStatus.name }"
+              />
+              <p v-if="!inputStatus.name">Campo Obrigatório</p>
+            </div>
           </div>
-          <div :class="{ inputBox: !inputStatus.name }">
-            <app-input
-              inputLabel="Nome Completo"
-              inputType="text"
-              v-model="user.name"
-              v-bind:class="{ inputWarning: !inputStatus.name }"
-            />
-            <p v-if="!inputStatus.name">Campo Obrigatório</p>
+          <div class="principal-column-content">
+            <div :class="{ inputBox: !inputStatus.unitId }">
+              <select
+                name="productunit"
+                id="productunit"
+                class="form-select mb-3"
+                v-model="user.unitId"
+              >
+                <option value="0">Escolha a unidade corporativa</option>
+                <option
+                  :value="productionUnit.id"
+                  v-for="productionUnit in productionsUnits"
+                  :key="productionUnit.id"
+                >
+                  {{ productionUnit.name }}
+                </option>
+              </select>
+              <p v-if="!inputStatus.unitId">Escolha uma unidade</p>
+            </div>
+            <div :class="{ inputBox: !inputStatus.email }">
+              <app-input
+                inputLabel="E-mail"
+                inputType="text"
+                v-model="user.email"
+              />
+              <p v-if="!inputStatus.email">E-mail Inválido</p>
+            </div>
           </div>
-          <div :class="{ inputBox: !inputStatus.password }">
+        </div>
+        <div class="principal-row">
+          <div
+            :class="{ inputBox: !inputStatus.password }"
+            class="principal-row-content"
+          >
             <app-input
               inputLabel="Senha"
               inputType="password"
@@ -39,36 +74,10 @@
             />
             <p v-if="!inputStatus.password">Senhas não conferem ou vazias</p>
           </div>
-        </div>
-        <div class="div-space"></div>
-        <div>
-          <div :class="{ inputBox: !inputStatus.unitId }">
-            <select
-              name="productunit"
-              id="productunit"
-              class="form-select mb-3"
-              v-model="user.unitId"
-            >
-              <option value="0">Escolha a unidade corporativa</option>
-              <option
-                :value="productionUnit.id"
-                v-for="productionUnit in productionsUnits"
-                :key="productionUnit.id"
-              >
-                {{ productionUnit.name }}
-              </option>
-            </select>
-            <p v-if="!inputStatus.unitId">Escolha uma unidade</p>
-          </div>
-          <div :class="{ inputBox: !inputStatus.email }">
-            <app-input
-              inputLabel="E-mail"
-              inputType="text"
-              v-model="user.email"
-            />
-            <p v-if="!inputStatus.email">E-mail Inválido</p>
-          </div>
-          <div :class="{ inputBox: !inputStatus.password }">
+          <div
+            :class="{ inputBox: !inputStatus.password }"
+            class="principal-row-content"
+          >
             <app-input
               inputLabel="Confirmação de Senha"
               inputType="password"
