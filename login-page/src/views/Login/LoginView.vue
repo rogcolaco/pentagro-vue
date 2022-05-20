@@ -1,6 +1,6 @@
 <template>
-  <div class="login-box d-grid gap-2 col-6 mx-auto container">
-    <img src="../assets/logo.png" alt="" srcset="" />
+  <div class="login-box d-grid gap-2 col-md-6 mx-auto container">
+    <img src="../../assets/logo.png" alt="" srcset="" />
     <app-input inputLabel="Login" inputType="text" identityValue = "login" v-model="name" />
     <app-input inputLabel="Senha" inputType="password" identityValue = "senha" v-model="pwd" />
     <p class="error-message" v-if="loginDenied">Usuário ou senha incorreta</p>
@@ -9,13 +9,11 @@
       btnType="btn-primary"
       @click.prevent="getCode"
     />
-    <!-- <p>Nome do usuário: {{ userData.Username }}</p>
-    <p>Senha do usuário: {{ userData.UserPassword }}</p> -->
   </div>
 </template>
 
 <script>
-import $http from "../plugins/axios";
+import $http from "../../plugins/axios";
 
 export default {
   name: "LoginView",
@@ -53,16 +51,59 @@ export default {
 </script>
 
 <style lang="less">
+@media (min-width: 576px){
+  .login-box {
+    
+    img {
+      width: 80%;
+      margin: 0 auto 20px auto;
+    }
+  }
+}
+
+@media (min-width: 768px){
+  .login-box {
+    
+    img {
+      width: 80%;
+    }
+  }
+}
+
+@media (min-width: 992px){
+  .login-box {
+    margin-top: 13%;
+    
+    img {
+      width: 60%;
+    }
+  }
+}
+
+@media (min-width: 1200px) {
+    .login-box {
+
+    .error-message {
+      color: rgb(194, 26, 26);
+    }
+
+    img {
+      width: 40%;
+    }
+  }
+}
+
+//CÓDIGO LESS PARA MEDIAS ABAIXO DE 576PX
 .login-box {
-  margin-top: 13%;
+  margin-top: 9%;
+  img {
+    width: 60%;
+    margin: 0 auto 20px auto;
+  }
 
   .error-message {
     color: rgb(194, 26, 26);
-  }
-
-  img {
-    width: 40%;
-    margin: 0 auto 20px auto;
+    margin-top: -19px;
   }
 }
 </style>
